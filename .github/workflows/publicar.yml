@@ -1,0 +1,56 @@
+name: Sincronizar con Behance y publicar
+
+on:
+  schedule:
+    - cron: "0 9 * * *" # 06:00 en Argentina
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+# Una corrida a la vez: si se solapan, la segunda haría push sobre un main viejo.
+concurrency:
+  group: publicar
+  cancel-in-progress: false
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v7
+
+      # Si Behance cambia su HTML el script falla, el deploy no corre y queda
+      # publicada la última versión buena.
+      - name: Sincronizar trabajos desde Behance
+        run: python3 scripts/sync_behance.py lolasatu data/behance.json
+
+      - name: Guardar cambios en el repo
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if ! git diff --quiet -- data/behance.json; then
+            git add data/behance.json
+            git commit -m "chore: sincronizar trabajos desde Behance"
+          elif [ $(( $(date +%s) - $(git log -1 --format=%ct) )) -gt $(( 45 * 86400 )) ]; then
+            # GitHub apaga los cron de repos públicos tras 60 días sin actividad.
+            git commit --allow-empty -m "chore: mantener activa la sincronización diaria"
+          else
+            echo "Sin cambios en Behance"
+            exit 0
+          fi
+          git pull --rebase
+          git push
+
+      - uses: actions/configure-pages@v6
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: .
+      - id: deployment
+        uses: actions/deploy-pages@v5

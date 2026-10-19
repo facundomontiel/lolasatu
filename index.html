@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lola Satu — Diseñadora audiovisual</title>
+  <meta name="description" content="Portfolio de Lola Satu, diseñadora audiovisual en Buenos Aires: video, fotografía y edición.">
+  <meta name="theme-color" content="#0e0d0c">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..800&display=swap">
+  <link rel="stylesheet" href="assets/styles.css">
+  <script src="assets/app.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main">Saltar al contenido</a>
+
+  <header class="site-header">
+    <a class="brand" href="#/"><span class="rec" aria-hidden="true"></span>Lola Satu</a>
+    <nav class="nav" aria-label="Principal">
+      <a href="#/" data-route="home">Trabajos</a>
+      <a href="#/sobre-mi" data-route="sobre-mi">Sobre mí</a>
+      <a href="#/contacto" data-route="contacto">Contacto</a>
+    </nav>
+  </header>
+
+  <main id="main" tabindex="-1"><p class="loading">Cargando…</p></main>
+
+  <footer class="site-footer">
+    <p>© <span data-field="year"></span> Lola Satu</p>
+    <p class="footer-links">
+      <a data-field="instagram" target="_blank" rel="noopener">Instagram</a>
+      <a data-field="behance" target="_blank" rel="noopener">Behance</a>
+    </p>
+  </footer>
+
+  <dialog class="lightbox" aria-label="Foto ampliada">
+    <img class="lightbox-img" alt="">
+    <p class="lightbox-count" aria-live="polite"></p>
+    <button class="lightbox-btn lightbox-close" type="button" aria-label="Cerrar">✕</button>
+    <button class="lightbox-btn lightbox-prev" type="button" aria-label="Foto anterior">←</button>
+    <button class="lightbox-btn lightbox-next" type="button" aria-label="Foto siguiente">→</button>
+  </dialog>
+
+  <template id="tpl-home">
+    <section class="intro">
+      <p class="kicker"><span data-field="occupation"></span> — <span data-field="location"></span></p>
+      <h1 class="intro-title" data-field="headline"></h1>
+    </section>
+    <div class="filters" role="group" aria-label="Filtrar trabajos">
+      <button type="button" data-filter="todo" aria-pressed="true">Todo<sup></sup></button>
+      <button type="button" data-filter="video" aria-pressed="false">Video<sup></sup></button>
+      <button type="button" data-filter="foto" aria-pressed="false">Foto<sup></sup></button>
+    </div>
+    <ul class="grid"></ul>
+  </template>
+
+  <template id="tpl-card">
+    <li class="card">
+      <a class="card-link">
+        <div class="card-media"><img loading="lazy" decoding="async" alt=""><span class="card-badge" hidden>▶ Video</span></div>
+        <h2 class="card-title"></h2>
+        <p class="card-meta"></p>
+      </a>
+    </li>
+  </template>
+
+  <template id="tpl-project">
+    <article class="project">
+      <a class="back" href="#/">← Trabajos</a>
+      <header class="project-head">
+        <h1 class="project-title"></h1>
+        <p class="project-desc"></p>
+        <dl class="project-meta">
+          <div><dt>Año</dt><dd data-field="year"></dd></div>
+          <div><dt>Formato</dt><dd data-field="kinds"></dd></div>
+          <div data-field="tags-row"><dt>Tags</dt><dd data-field="tags"></dd></div>
+        </dl>
+      </header>
+      <div class="project-body"></div>
+      <nav class="more" aria-label="Más trabajos">
+        <h2 class="section-label">Más trabajos</h2>
+        <ul class="grid grid--more"></ul>
+      </nav>
+    </article>
+  </template>
+
+  <template id="tpl-about">
+    <section class="about">
+      <img class="about-photo" alt="Lola Satu" width="276" height="276">
+      <div class="about-text">
+        <h1 class="page-title">Sobre mí</h1>
+        <div class="about-bio"></div>
+        <h2 class="section-label">Qué hago</h2>
+        <ul class="tag-list" data-field="services"></ul>
+        <h2 class="section-label">Herramientas</h2>
+        <ul class="tag-list" data-field="tools"></ul>
+        <a class="cta" href="#/contacto">Escribime →</a>
+      </div>
+    </section>
+  </template>
+
+  <template id="tpl-contact">
+    <section class="contact">
+      <h1 class="page-title page-title--big">¿Hacemos algo juntos?</h1>
+      <ul class="contact-list">
+        <li><a data-field="instagram" target="_blank" rel="noopener"><span>Instagram</span><span data-field="instagram-handle"></span></a></li>
+        <li><a data-field="behance" target="_blank" rel="noopener"><span>Behance</span><span data-field="behance-handle"></span></a></li>
+        <li><a data-field="email"><span>Email</span><span data-field="email-label"></span></a></li>
+      </ul>
+    </section>
+  </template>
+</body>
+</html>

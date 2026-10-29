@@ -1,5 +1,7 @@
 "use strict";
 
+import { createVideoTile, isAdobeVideo, openReelViewer, setupReelViewer } from "./reels.js";
+
 // behance.json lo genera scripts/sync_behance.py; sitio.json son los textos que se editan a mano.
 const EMBED_PREFIXES = [
   "https://www-ccv.adobe.io/",
@@ -160,19 +162,34 @@ function reelColumns(count) {
   return count % 4 === 0 ? 4 : 3;
 }
 
-function reelsElement(items, title) {
+// Los videos de Adobe se muestran como portada y se ven en el visor; YouTube queda embebido.
+function videoBlockElement(block, ctx) {
+  if (!isAdobeVideo(block)) return videoElement(block, ctx.title);
+  const index = ctx.videos.findIndex((item) => item.block === block);
+  const tile = createVideoTile(block, {
+    label: `Ver video ${index + 1} — ${ctx.title}`,
+    onOpen: () => openReelViewer(ctx.videos, index),
+    fallback: () => videoElement(block, ctx.title),
+  });
+  if (block.ratio >= 1) tile.classList.add("video-tile--wide");
+  return tile;
+}
+
+function reelsElement(items, ctx) {
   const reels = createElement("div", "reels");
   reels.style.setProperty("--cols", reelColumns(items.length));
-  reels.append(...items.map((item) => videoElement(item, title)));
+  reels.append(...items.map((item) => videoBlockElement(item, ctx)));
   return reels;
 }
 
-function blockElement(block, photos, title) {
+function blockElement(block, ctx) {
   if (block.type === "text") return proseElement(block.html);
-  if (block.type === "images") return galleryElement(block.items, photos, title);
-  if (block.type === "video") return videoElement(block, title);
-  return reelsElement(block.items, title);
+  if (block.type === "images") return galleryElement(block.items, ctx.photos, ctx.title);
+  if (block.type === "video") return videoBlockElement(block, ctx);
+  return reelsElement(block.items, ctx);
 }
+
+const videoItems = (project, blocks) => blocks.map((block) => ({ block, title: project.title, slug: project.slug }));
 
 function nextProjects(index, count) {
   const { projects } = state.behance;
@@ -199,11 +216,29 @@ function renderProject(slug) {
   setText(view, "tags", project.tags.slice(0, 5).join(", "));
   $('[data-field="tags-row"]', view).hidden = !project.tags.length;
   $(".project-desc", view).textContent = project.description;
-  const photos = [];
-  const blocks = groupBlocks(project.blocks).map((block) => blockElement(block, photos, project.title));
+  const ctx = { photos: [], title: project.title, videos: videoItems(project, project.blocks.filter(isAdobeVideo)) };
+  const blocks = groupBlocks(project.blocks).map((block) => blockElement(block, ctx));
   $(".project-body", view).append(...blocks);
   $(".grid--more", view).append(...nextProjects(index, 3).map(cardElement));
   document.title = `${project.title} — Lola Satu`;
+  return view;
+}
+
+/* ---------- Reels ---------- */
+
+function renderReels() {
+  const view = cloneTemplate("tpl-reels");
+  const reels = state.behance.projects.flatMap((project) =>
+    videoItems(project, project.blocks.filter((block) => isAdobeVideo(block) && isReel(block))));
+  setText(view, "reels-count", `${reels.length} videos verticales de sus proyectos`);
+  const tiles = reels.map((item, index) => createVideoTile(item.block, {
+    label: `Ver reel ${index + 1}: ${item.title}`,
+    caption: item.title,
+    onOpen: () => openReelViewer(reels, index),
+    fallback: () => videoElement(item.block, item.title),
+  }));
+  $(".reel-grid", view).append(...tiles);
+  document.title = "Reels — Lola Satu";
   return view;
 }
 
@@ -282,8 +317,14 @@ function setupLightbox() {
 
 /* ---------- Router ---------- */
 
-const VIEWS = { "": renderHome, trabajo: renderProject, "sobre-mi": renderAbout, contacto: renderContact };
-const NAV_FOR_VIEW = { "": "home", trabajo: "home", "sobre-mi": "sobre-mi", contacto: "contacto" };
+const VIEWS = {
+  "": renderHome,
+  trabajo: renderProject,
+  reels: renderReels,
+  "sobre-mi": renderAbout,
+  contacto: renderContact,
+};
+const NAV_FOR_VIEW = { "": "home", trabajo: "home", reels: "reels", "sobre-mi": "sobre-mi", contacto: "contacto" };
 
 function route() {
   if (state.currentRoute === "") state.homeScroll = window.scrollY;
@@ -318,6 +359,7 @@ async function boot() {
   }
   fillFooter();
   setupLightbox();
+  setupReelViewer();
   window.addEventListener("hashchange", route);
   route();
 }

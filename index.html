@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..800&display=swap">
   <link rel="stylesheet" href="assets/styles.css">
-  <script src="assets/app.js" defer></script>
+  <script type="module" src="assets/app.js"></script>
 </head>
 <body>
   <a class="skip" href="#main">Saltar al contenido</a>
@@ -19,6 +19,7 @@
     <a class="brand" href="#/"><span class="rec" aria-hidden="true"></span>Lola Satu</a>
     <nav class="nav" aria-label="Principal">
       <a href="#/" data-route="home">Trabajos</a>
+      <a href="#/reels" data-route="reels">Reels</a>
       <a href="#/sobre-mi" data-route="sobre-mi">Sobre mí</a>
       <a href="#/contacto" data-route="contacto">Contacto</a>
     </nav>
@@ -42,6 +43,42 @@
     <button class="lightbox-btn lightbox-next" type="button" aria-label="Foto siguiente">→</button>
   </dialog>
 
+  <dialog class="viewer" aria-label="Videos">
+    <div class="viewer-feed"></div>
+    <button class="viewer-btn viewer-sound" type="button" aria-label="Activar sonido" aria-pressed="false">
+      <svg class="icon-muted" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path d="M16 9l5 6m0-6l-5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <svg class="icon-sound" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path d="M16.5 8.5a5 5 0 010 7M19 6a8.5 8.5 0 010 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+    <button class="viewer-btn viewer-close" type="button" aria-label="Cerrar">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+    <button class="viewer-btn viewer-prev" type="button" aria-label="Video anterior">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 15l6-6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <button class="viewer-btn viewer-next" type="button" aria-label="Video siguiente">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </dialog>
+
+  <template id="tpl-video-tile">
+    <button class="video-tile" type="button">
+      <img alt="" decoding="async">
+      <svg class="tile-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg>
+      <span class="tile-caption"></span>
+    </button>
+  </template>
+
+  <template id="tpl-viewer-slide">
+    <section class="viewer-slide">
+      <div class="viewer-frame">
+        <video class="viewer-video" playsinline loop muted preload="none"></video>
+        <svg class="viewer-paused" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg>
+        <div class="viewer-caption"><a class="viewer-title"></a><span class="viewer-count"></span></div>
+        <div class="viewer-progress"><span></span></div>
+      </div>
+    </section>
+  </template>
+
   <template id="tpl-home">
     <section class="intro">
       <p class="kicker"><span data-field="occupation"></span> — <span data-field="location"></span></p>
@@ -58,7 +95,7 @@
   <template id="tpl-card">
     <li class="card">
       <a class="card-link">
-        <div class="card-media"><img loading="lazy" decoding="async" alt=""><span class="card-badge" hidden>▶ Video</span></div>
+        <div class="card-media"><img loading="lazy" decoding="async" alt=""><span class="card-badge" hidden>Video</span></div>
         <h2 class="card-title"></h2>
         <p class="card-meta"></p>
       </a>
@@ -83,6 +120,14 @@
         <ul class="grid grid--more"></ul>
       </nav>
     </article>
+  </template>
+
+  <template id="tpl-reels">
+    <section class="reels-page">
+      <h1 class="page-title">Reels</h1>
+      <p class="kicker" data-field="reels-count"></p>
+      <div class="reel-grid"></div>
+    </section>
   </template>
 
   <template id="tpl-about">

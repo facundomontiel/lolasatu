@@ -77,13 +77,10 @@ function applyFilter(grid, kind) {
   });
 }
 
-function setupFilters(view, projects) {
+function setupFilters(view) {
   const grid = $(".grid", view);
   $$("[data-filter]", view).forEach((button) => {
-    const kind = button.dataset.filter;
-    const count = kind === "todo" ? projects.length : projects.filter((p) => p.kinds.includes(kind)).length;
-    $("sup", button).textContent = count;
-    button.addEventListener("click", () => applyFilter(grid, kind));
+    button.addEventListener("click", () => applyFilter(grid, button.dataset.filter));
   });
   applyFilter(grid, state.filter);
 }
@@ -95,7 +92,7 @@ function renderHome() {
   setText(view, "location", profile.location);
   setText(view, "headline", state.site.headline);
   $(".grid", view).append(...projects.map(cardElement));
-  setupFilters(view, projects);
+  setupFilters(view);
   document.title = `${profile.name} — ${profile.occupation}`;
   return view;
 }

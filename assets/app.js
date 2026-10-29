@@ -14,7 +14,7 @@ const GALLERY_SIZES = "(min-width: 640px) 45vw, 90vw";
 const SITE_BG = "%230e0d0c";
 
 const state = { behance: null, site: null, filter: "todo", homeScroll: 0, currentRoute: null };
-const lightbox = { photos: [], index: 0 };
+const lightbox = { photos: [], index: 0, observer: null, pending: new WeakMap() };
 
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
@@ -278,40 +278,82 @@ function renderContact() {
 
 /* ---------- Lightbox ---------- */
 
+// Carrusel horizontal con scroll-snap: en el celu la foto sigue al dedo, como en Instagram.
+// Cada foto se pide recién cuando está a una pantalla de distancia.
+function lightboxSlide(photo) {
+  const slide = createElement("div", "lightbox-slide");
+  const img = createElement("img");
+  Object.assign(img, { alt: "", decoding: "async" });
+  slide.append(img);
+  lightbox.pending.set(slide, () => setImage(img, photo, "100vw"));
+  return slide;
+}
+
+function updateLightboxPosition() {
+  const track = $(".lightbox-track");
+  const last = lightbox.photos.length - 1;
+  lightbox.index = Math.min(last, Math.max(0, Math.round(track.scrollLeft / track.clientWidth)));
+  $(".lightbox-count").textContent = `${lightbox.index + 1} / ${lightbox.photos.length}`;
+  $(".lightbox-prev").hidden = lightbox.index === 0;
+  $(".lightbox-next").hidden = lightbox.index === last;
+}
+
 function showPhoto(index) {
-  const total = lightbox.photos.length;
-  lightbox.index = (index + total) % total;
-  setImage($(".lightbox-img"), lightbox.photos[lightbox.index], "100vw");
-  $(".lightbox-count").textContent = `${lightbox.index + 1} / ${total}`;
+  const track = $(".lightbox-track");
+  const target = Math.min(lightbox.photos.length - 1, Math.max(0, index));
+  track.scrollTo({ left: target * track.clientWidth, behavior: "smooth" });
 }
 
 function openLightbox(photos, index) {
   lightbox.photos = photos;
-  showPhoto(index);
+  const track = $(".lightbox-track");
+  const slides = photos.map(lightboxSlide);
+  track.replaceChildren(...slides);
   $(".lightbox").showModal();
+  // Primero se salta a la foto tocada y recién después se observa: si no, también carga las del principio.
+  track.scrollTo({ left: index * track.clientWidth, behavior: "instant" });
+  slides.forEach((slide) => lightbox.observer.observe(slide));
+  updateLightboxPosition();
 }
 
-function setupSwipe(dialog) {
-  let startX = null;
-  dialog.addEventListener("touchstart", (event) => { startX = event.touches[0].clientX; }, { passive: true });
-  dialog.addEventListener("touchend", (event) => {
-    const deltaX = event.changedTouches[0].clientX - startX;
-    if (startX !== null && Math.abs(deltaX) > 50) showPhoto(lightbox.index + (deltaX < 0 ? 1 : -1));
-    startX = null;
-  });
+function observeLightboxSlides(track) {
+  return new IntersectionObserver((entries) => {
+    for (const entry of entries.filter((item) => item.isIntersecting)) {
+      lightbox.observer.unobserve(entry.target);
+      lightbox.pending.get(entry.target)?.();
+    }
+    // Media pantalla de margen alcanza a las vecinas; con una entera, las que tocan el borde
+    // cuentan como visibles y se cargaban dos de cada lado.
+  }, { root: track, rootMargin: "0px 50%" });
 }
 
 function setupLightbox() {
   const dialog = $(".lightbox");
+  const track = $(".lightbox-track");
+  lightbox.observer = observeLightboxSlides(track);
+  let frame = 0;
+  track.addEventListener("scroll", () => {
+    cancelAnimationFrame(frame);
+    frame = requestAnimationFrame(updateLightboxPosition);
+  }, { passive: true });
   $(".lightbox-close").addEventListener("click", () => dialog.close());
   $(".lightbox-prev").addEventListener("click", () => showPhoto(lightbox.index - 1));
   $(".lightbox-next").addEventListener("click", () => showPhoto(lightbox.index + 1));
-  dialog.addEventListener("click", (event) => { if (event.target === dialog) dialog.close(); });
-  dialog.addEventListener("keydown", (event) => {
-    if (event.key === "ArrowLeft") showPhoto(lightbox.index - 1);
-    if (event.key === "ArrowRight") showPhoto(lightbox.index + 1);
+  // Tocar fuera de la foto (el fondo) cierra; tocar la foto no.
+  dialog.addEventListener("click", (event) => {
+    if (event.target === dialog || event.target.classList.contains("lightbox-slide")) dialog.close();
   });
-  setupSwipe(dialog);
+  dialog.addEventListener("keydown", (event) => {
+    const step = { ArrowLeft: -1, ArrowRight: 1 }[event.key];
+    if (!step) return;
+    // Sin esto, si el carrusel tiene el foco, la flecha también lo scrollea nativo y se pisan.
+    event.preventDefault();
+    showPhoto(lightbox.index + step);
+  });
+  dialog.addEventListener("close", () => {
+    lightbox.observer.disconnect();
+    track.replaceChildren();
+  });
   window.addEventListener("hashchange", () => { if (dialog.open) dialog.close(); });
 }
 

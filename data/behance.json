@@ -31,12 +31,17 @@
     "video"
    ],
    "cover": {
-    "src": "https://mir-s3-cdn-cf.behance.net/projects/808/fff9a9254523559.Y3JvcCw4MDgsNjMyLDAsMA.jpg",
-    "srcset": "https://mir-s3-cdn-cf.behance.net/projects/404/fff9a9254523559.Y3JvcCw4MDgsNjMyLDAsMA.jpg 404w, https://mir-s3-cdn-cf.behance.net/projects/808/fff9a9254523559.Y3JvcCw4MDgsNjMyLDAsMA.jpg 808w",
+    "src": "https://mir-s3-cdn-cf.behance.net/projects/808/c2c540254523559.Y3JvcCw0NjcyLDM2NTQsMCwxOTA4.jpg",
+    "srcset": "https://mir-s3-cdn-cf.behance.net/projects/404/c2c540254523559.Y3JvcCw0NjcyLDM2NTQsMCwxOTA4.jpg 404w, https://mir-s3-cdn-cf.behance.net/projects/808/c2c540254523559.Y3JvcCw0NjcyLDM2NTQsMCwxOTA4.jpg 808w",
     "width": 808
    },
    "behanceUrl": "https://www.behance.net/gallery/254523559/Contenido-Audiovisual-Para-El-Club-De-La-Mortal",
    "blocks": [
+    {
+     "type": "video",
+     "src": "https://www-ccv.adobe.io/v1/player/ccv/4e5SNWF2sBX/embed?api_key=behance1&bgcolor=%23191919",
+     "ratio": 1.7804
+    },
     {
      "type": "video",
      "src": "https://www-ccv.adobe.io/v1/player/ccv/NIZNXTMSfAf/embed?api_key=behance1&bgcolor=%23191919",
@@ -4503,16 +4508,15 @@
    "description": "",
    "year": 2025,
    "tags": [
-    "reels",
     "premiere",
     "sonya6400",
-    "video",
     "vestidos",
     "tapados",
     "guillermina lynch",
     "Ropa",
     "moda",
-    "fashion design"
+    "fashion design",
+    "Contenido redes sociales"
    ],
    "kinds": [
     "video"
@@ -4546,7 +4550,8 @@
     "trap",
     "musica",
     "Videoclip",
-    "direccion"
+    "direccion",
+    "Videoclips"
    ],
    "kinds": [
     "video"
@@ -4579,7 +4584,8 @@
     "Edición de Video",
     "direccion",
     "prize",
-    "trap"
+    "trap",
+    "Videoclips"
    ],
    "kinds": [
     "video"
@@ -4612,7 +4618,8 @@
     "city",
     "Travel",
     "фото",
-    "Contenido redes sociales"
+    "Contenido redes sociales",
+    "fotografia callejera"
    ],
    "kinds": [
     "foto"
@@ -4740,7 +4747,8 @@
     "Iluminación",
     "Fotografia",
     "model",
-    "wanda vision"
+    "wanda vision",
+    "Videoclips"
    ],
    "kinds": [
     "video"
@@ -4770,7 +4778,8 @@
     "camara",
     "gimball",
     "Videoclip",
-    "trap"
+    "trap",
+    "Videoclips"
    ],
    "kinds": [
     "video"
@@ -5263,9 +5272,9 @@
     "light",
     "mood",
     "Fotografia",
-    "color correction",
     "davinci resolve",
-    "dirección de fotografía"
+    "dirección de fotografía",
+    "cortometrajes"
    ],
    "kinds": [
     "video"
@@ -5294,13 +5303,13 @@
     "Street",
     "Ropa",
     "clothe",
-    "producto",
     "modelo",
     "marca",
     "publicidad",
-    "foto",
-    "arquitecura",
-    "moda"
+    "moda",
+    "фото",
+    "Contenido redes sociales",
+    "fotografia callejera"
    ],
    "kinds": [
     "foto"
@@ -5440,9 +5449,10 @@
     "museo",
     "Videoclip",
     "music video",
-    "foto",
     "edición",
-    "Ropa"
+    "Ropa",
+    "фото",
+    "fotografia callejera"
    ],
    "kinds": [
     "foto"
@@ -5556,41 +5566,6 @@
    ]
   },
   {
-   "id": 204960435,
-   "slug": "decadencia-corto",
-   "title": "Decadencia - Corto",
-   "description": "",
-   "year": 2024,
-   "tags": [
-    "sombras",
-    "corto",
-    "hombre",
-    "foto",
-    "video",
-    "estetico",
-    "calido",
-    "Iluminación",
-    "soledad",
-    "sonya6400"
-   ],
-   "kinds": [
-    "video"
-   ],
-   "cover": {
-    "src": "https://mir-s3-cdn-cf.behance.net/projects/808/675c31204960435.Y3JvcCwxMzgwLDEwODAsMjcwLDA.png",
-    "srcset": "https://mir-s3-cdn-cf.behance.net/projects/404/675c31204960435.Y3JvcCwxMzgwLDEwODAsMjcwLDA.png 404w, https://mir-s3-cdn-cf.behance.net/projects/808/675c31204960435.Y3JvcCwxMzgwLDEwODAsMjcwLDA.png 808w",
-    "width": 808
-   },
-   "behanceUrl": "https://www.behance.net/gallery/204960435/Decadencia-Corto",
-   "blocks": [
-    {
-     "type": "video",
-     "src": "https://www-ccv.adobe.io/v1/player/ccv/LhveQucdAPV/embed?api_key=behance1&bgcolor=%23191919",
-     "ratio": 1.7804
-    }
-   ]
-  },
-  {
    "id": 204961199,
    "slug": "bajo-llave-corto",
    "title": "Bajo Llave - Corto",
@@ -5602,10 +5577,11 @@
     "corto",
     "ficción",
     "Iluminación",
-    "foto",
     "video",
     "teatro",
-    "actuacion"
+    "actuacion",
+    "фото",
+    "cortometrajes"
    ],
    "kinds": [
     "video"
@@ -5635,9 +5611,10 @@
     "Melancolia",
     "jardin",
     "retrato",
-    "foto",
     "detalle",
-    "perdida"
+    "perdida",
+    "фото",
+    "Fotografía Artística"
    ],
    "kinds": [
     "foto"

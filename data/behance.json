@@ -38,10 +38,6 @@
    "behanceUrl": "https://www.behance.net/gallery/254523559/Contenido-Audiovisual-Para-El-Club-De-La-Mortal",
    "blocks": [
     {
-     "type": "text",
-     "html": "<a href=\"https://www.instagram.com/elclubdelamortal/?hl=es-la\" target=\"_blank\" rel=\"noopener\">LINK AL INSTAGRAM</a>"
-    },
-    {
      "type": "video",
      "src": "https://www-ccv.adobe.io/v1/player/ccv/NIZNXTMSfAf/embed?api_key=behance1&bgcolor=%23191919",
      "ratio": 0.5629
@@ -3440,10 +3436,10 @@
    "tags": [
     "Videoclip",
     "Fotografia",
-    "foto",
     "fotografa",
     "Foto FIja",
-    "sonyayiii"
+    "sonyayiii",
+    "фото"
    ],
    "kinds": [
     "foto"
@@ -3593,9 +3589,10 @@
     "callejera",
     "tigre",
     "arquitectura",
-    "foto",
     "sonya6400",
-    "Puerto de Frutos"
+    "Puerto de Frutos",
+    "фото",
+    "Fotografía Callejera}"
    ],
    "kinds": [
     "foto"
@@ -3697,7 +3694,7 @@
     "Beach games",
     "reels",
     "Evento",
-    "vfx"
+    "Contenido redes sociales"
    ],
    "kinds": [
     "video"
@@ -3737,9 +3734,8 @@
     "rock",
     "Instrumentos",
     "reel",
-    "contenido",
-    "redes sociales",
-    "post"
+    "post",
+    "Contenido redes sociales"
    ],
    "kinds": [
     "video"
@@ -3777,7 +3773,8 @@
    "tags": [
     "maraton",
     "carrera",
-    "Fotografia"
+    "Fotografia",
+    "Fotografía deportiva"
    ],
    "kinds": [
     "foto"
@@ -3934,11 +3931,11 @@
     "Vestuarista",
     "estilismo",
     "Estilismo de moda",
-    "Fotografia",
     "video",
     "reel",
     "instagram",
-    "Social Media Design"
+    "Social Media Design",
+    "Contenido redes sociales"
    ],
    "kinds": [
     "video"
@@ -3988,7 +3985,8 @@
     "carrera",
     "argentina",
     "camara",
-    "sonya6400"
+    "sonya6400",
+    "Fotografía deportiva"
    ],
    "kinds": [
     "foto"
@@ -4472,10 +4470,9 @@
     "video",
     "verano",
     "grabación",
-    "edición",
-    "reels",
     "instagram",
-    "marketing  "
+    "marketing  ",
+    "Contenido redes sociales"
    ],
    "kinds": [
     "video"
@@ -4608,16 +4605,14 @@
    "description": "",
    "year": 2024,
    "tags": [
-    "trapper",
     "estilo",
-    "Flash",
-    "foto",
-    "Fotografia",
     "Photography ",
     "Street",
     "Urban",
     "city",
-    "Travel"
+    "Travel",
+    "фото",
+    "Contenido redes sociales"
    ],
    "kinds": [
     "foto"

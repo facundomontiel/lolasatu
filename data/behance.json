@@ -2303,7 +2303,8 @@
     "maraton",
     "carrera",
     "deporte",
-    "Fotografia"
+    "Fotografia",
+    "Fotografía deportiva"
    ],
    "kinds": [
     "foto"
@@ -2451,7 +2452,9 @@
    "tags": [
     "Album",
     "musica",
-    "Fotos"
+    "Fotos",
+    "fotografia callejera",
+    "Portadas para Álbum"
    ],
    "kinds": [
     "foto"
@@ -2662,7 +2665,8 @@
     "Album",
     "Portada",
     "Fotografia",
-    "lolasatu"
+    "lolasatu",
+    "Portadas para Álbum"
    ],
    "kinds": [
     "foto"

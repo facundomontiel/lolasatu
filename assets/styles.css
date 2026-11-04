@@ -1,15 +1,27 @@
+/* Jost (geométrica, inspirada en Futura), alojada en el sitio. Variable: un solo archivo cubre los
+   pesos 100–900. Es el TTF original pasado a WOFF2 sin subsetear. Licencia OFL en assets/fonts/OFL.txt.
+   No trae las flechas ← →: esas salen con la fuente del sistema. */
+@font-face {
+  font-family: "Jost";
+  src: url("fonts/Jost-VariableFont_wght.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
-  --bg: #0e0d0c;
-  --surface: #181715;
-  --text: #f1ede6;
-  --muted: #9a948b;
-  --line: #2b2926;
+  --bg: #ffffff;
+  --surface: #f1efeb;
+  --text: #111111;
+  --muted: #6b665f;
+  --line: #e6e2dc;
   --accent: #ff4130;
+  --sidebar-w: 280px;
   --gutter: clamp(16px, 4vw, 48px);
   --gap: 10px;
   --row-h: 300px;
-  --display: "Poppins", system-ui, sans-serif;
-  --body: "Poppins", system-ui, sans-serif;
+  --display: "Jost", system-ui, sans-serif;
+  --body: "Jost", system-ui, sans-serif;
 }
 
 * { box-sizing: border-box; }
@@ -18,7 +30,7 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--text);
-  font: 400 16px/1.6 var(--body);
+  font: 400 17px/1.6 var(--body);
   -webkit-font-smoothing: antialiased;
 }
 img { display: block; max-width: 100%; }
@@ -29,73 +41,94 @@ button { font: inherit; color: inherit; }
 .skip { position: absolute; left: -9999px; }
 .skip:focus { left: var(--gutter); top: 8px; z-index: 20; background: var(--text); color: var(--bg); padding: 6px 12px; }
 
-/* Tipografía display: Poppins en mayúsculas, la misma familia que el cuerpo.
-   Poppins es ancha: los tamaños de títulos están achicados respecto de cuando era Archivo comprimida. */
-.brand, .nav, .intro-title, .filters, .card-title, .project-title, .page-title,
-.section-label, .back, .cta, .contact-list, .project-meta dt, .card-badge {
+/* Contenido en blanco con letra negra; el menú y los visores son oscuros y redefinen los tokens
+   para sí mismos, así todo lo que usa var(--text)/var(--bg) adentro se adapta solo. */
+.sidebar, .lightbox, .viewer {
+  --bg: #0e0d0c;
+  --surface: #181715;
+  --text: #f1ede6;
+  --muted: #9a948b;
+  --line: #2b2926;
+}
+
+/* Tipografía display: Jost en mayúsculas, la misma familia que el cuerpo. */
+.menu-main, .card-title, .project-title, .page-title,
+.section-label, .back, .cta, .contact-list {
   font-family: var(--display);
   text-transform: uppercase;
   letter-spacing: 0.02em;
 }
 
-/* Header */
-.site-header {
-  position: sticky; top: 0; z-index: 10;
-  display: flex; align-items: center; justify-content: space-between; gap: 16px;
-  padding: 18px var(--gutter);
-  background: color-mix(in srgb, var(--bg) 82%, transparent);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--line);
+/* Menú lateral negro, fijo a la izquierda. En el celu pasa a barra de arriba (ver media query). */
+.sidebar {
+  position: fixed; inset: 0 auto 0 0; z-index: 10; width: var(--sidebar-w);
+  display: flex; flex-direction: column; overflow-y: auto;
+  padding: 52px 28px 32px; background: var(--bg); color: var(--text); text-align: center;
 }
-.brand { display: inline-flex; align-items: center; font-size: 1.3rem; font-weight: 700; text-decoration: none; }
-.nav { display: flex; gap: clamp(14px, 3vw, 32px); font-size: .85rem; font-weight: 600; }
-.nav a { text-decoration: none; color: var(--muted); transition: color .2s; }
-.nav a:hover, .nav a[aria-current="page"] { color: var(--text); }
-.nav a[aria-current="page"] { text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 6px; text-decoration-thickness: 2px; }
+/* En mayúsculas por CSS: así los lectores de pantalla lo leen como nombre y no letra por letra. */
+.brand { font-size: 2rem; font-weight: 700; line-height: 1; letter-spacing: .04em; text-transform: uppercase; text-decoration: none; }
+.menu-toggle { display: none; }
+.sidebar-panel { display: flex; flex-direction: column; flex: 1; }
+.menu { display: flex; flex-direction: column; align-items: center; gap: 26px; margin-top: 52px; }
+.menu-group { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.menu-main { font-size: 1rem; font-weight: 700; letter-spacing: .1em; text-decoration: none; color: var(--text); }
+.menu-sub { list-style: none; margin: 0; padding: 0; display: grid; gap: 7px; }
+.menu-sub a { color: var(--muted); text-decoration: none; font-size: .98rem; line-height: 1.25; transition: color .2s; }
+.menu a:hover { color: var(--text); }
+/* En el menú nada es rojo: hover, sección activa y foco van en blanco. */
+.menu a[aria-current="page"] { color: var(--text); text-decoration: underline; text-decoration-color: currentColor; text-underline-offset: 5px; text-decoration-thickness: 2px; }
+.sidebar :focus-visible { outline-color: var(--text); }
+.sidebar-social { display: flex; justify-content: center; gap: 14px; margin: auto 0 0; padding-top: 44px; }
+.sidebar-social a { display: block; padding: 6px; color: var(--muted); transition: color .2s; }
+.sidebar-social svg { display: block; width: 22px; height: 22px; }
+.sidebar-social a:hover { color: var(--text); }
+html.menu-open { overflow: hidden; }
 
-main { padding: 0 var(--gutter); min-height: 70vh; }
+.page { margin-left: var(--sidebar-w); min-height: 100vh; display: flex; flex-direction: column; }
+main { flex: 1; padding: 0 var(--gutter); }
 main:focus { outline: none; }
 .loading { color: var(--muted); padding: 80px 0; }
 
 /* Home */
-.intro { padding: clamp(48px, 9vw, 120px) 0 clamp(28px, 4vw, 48px); max-width: 1100px; }
+.home { padding-top: var(--gutter); }
+/* Oculto a la vista pero presente para lectores de pantalla y buscadores. */
+.visually-hidden { position: absolute; width: 1px; height: 1px; margin: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .kicker { margin: 0 0 14px; color: var(--muted); font-size: .95rem; }
-.intro-title { margin: 0; font-size: clamp(1.9rem, 5vw, 4.1rem); line-height: 1.05; font-weight: 700; }
-
-.filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
-.filters button {
-  border: 1px solid var(--line); background: transparent; border-radius: 999px;
-  padding: 6px 16px; font-size: .85rem; font-weight: 600; cursor: pointer; color: var(--muted);
-  transition: color .2s, border-color .2s, background .2s;
-}
-.filters button:hover { color: var(--text); border-color: var(--muted); }
-.filters button[aria-pressed="true"] { background: var(--text); border-color: var(--text); color: var(--bg); }
 
 .grid { list-style: none; margin: 0; padding: 0; display: grid; gap: 40px 20px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
-.card[hidden] { display: none; }
-.card-link { display: block; text-decoration: none; }
+.card-link { position: relative; display: block; text-decoration: none; }
 .card-media { position: relative; overflow: hidden; aspect-ratio: 808 / 632; background: var(--surface); }
-.card-media img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s cubic-bezier(.2, .7, .2, 1), filter .4s; }
-.card-link:hover .card-media img { transform: scale(1.04); filter: brightness(.85); }
-.card-badge {
-  position: absolute; left: 12px; top: 12px; padding: 3px 9px; font-size: .68rem; font-weight: 600;
-  background: color-mix(in srgb, var(--bg) 70%, transparent); border-radius: 3px;
-}
-.card-title { margin: 14px 0 4px; font-size: 1.02rem; line-height: 1.25; font-weight: 700; }
+.card-media img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s cubic-bezier(.2, .7, .2, 1); }
+.card-link:hover .card-media img { transform: scale(1.03); }
+.card-title { margin: 14px 0 4px; font-size: 1.15rem; line-height: 1.2; font-weight: 700; }
 .card-link:hover .card-title { color: var(--accent); }
 .card-meta { margin: 0; color: var(--muted); font-size: .9rem; }
 
+/* Con mouse, el título aparece al pasar por encima, en un recuadro blanco sobre la foto.
+   En pantallas táctiles no hay hover: ahí el título sigue visible debajo de la foto. */
+.card-overlay {
+  position: absolute; inset: 18px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+  padding: 16px; text-align: center; background: rgba(255, 255, 255, .86); color: var(--text);
+  opacity: 0; transition: opacity .35s;
+}
+.card-year { color: var(--muted); font-size: .95rem; letter-spacing: .04em; }
+.card-overlay-title { font: 300 clamp(1.15rem, 1.8vw, 1.8rem)/1.12 var(--display); text-transform: uppercase; letter-spacing: .02em; }
+@media (hover: hover) {
+  .grid { row-gap: 20px; }
+  .card-link:hover .card-overlay, .card-link:focus-visible .card-overlay { opacity: 1; }
+  /* El h2 queda para lectores de pantalla y buscadores, pero no se ve. */
+  .card-title, .card-meta { position: absolute; width: 1px; height: 1px; margin: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+}
+@media (hover: none) { .card-overlay { display: none; } }
+
 /* Proyecto */
 .project { padding-top: 32px; }
-.back { display: inline-block; color: var(--muted); text-decoration: none; font-weight: 600; font-size: .85rem; }
+.back { display: inline-block; color: var(--muted); text-decoration: none; font-weight: 600; font-size: .95rem; }
 .back:hover { color: var(--text); }
 .project-head { display: grid; gap: 18px; padding: 28px 0 40px; }
-.project-title { margin: 0; font-size: clamp(1.6rem, 3.9vw, 3.2rem); line-height: 1.08; font-weight: 700; max-width: 22ch; }
+.project-title { margin: 0; font-size: clamp(1.85rem, 4.5vw, 3.7rem); line-height: 1.05; font-weight: 700; max-width: 22ch; }
 .project-desc { margin: 0; color: var(--muted); font-size: 1.15rem; max-width: 60ch; }
 .project-desc:empty { display: none; }
-.project-meta { display: flex; flex-wrap: wrap; gap: 12px 36px; margin: 6px 0 0; }
-.project-meta dt { color: var(--muted); font-size: .7rem; }
-.project-meta dd { margin: 0; }
 .project-body { display: grid; gap: var(--gap); }
 
 .prose { max-width: 62ch; margin: 18px 0; font-size: 1.05rem; }
@@ -123,7 +156,7 @@ main:focus { outline: none; }
 /* Portada de video: abre el visor. --r es la proporción del video. */
 .video-tile {
   position: relative; display: block; width: 100%; aspect-ratio: var(--r); padding: 0; border: 0;
-  overflow: hidden; background: var(--surface); color: var(--text); cursor: pointer;
+  overflow: hidden; background: var(--surface); color: #fff; cursor: pointer;
 }
 .video-tile img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity .4s, transform .6s cubic-bezier(.2, .7, .2, 1); }
 .video-tile.is-ready img { opacity: 1; }
@@ -132,16 +165,18 @@ main:focus { outline: none; }
 .video-tile--wide { max-width: 1200px; margin: 0 auto; }
 .video-tile--wide .tile-play {
   inset: 0; margin: auto; width: 64px; height: 64px; padding: 16px 14px 16px 18px;
-  border-radius: 50%; background: color-mix(in srgb, var(--bg) 60%, transparent);
+  border-radius: 50%; background: rgba(0, 0, 0, .5);
 }
 .tile-caption:empty { display: none; }
 .tile-caption {
   position: absolute; left: 0; right: 0; bottom: 0; padding: 32px 10px 10px; text-align: left;
   background: linear-gradient(transparent, rgba(0, 0, 0, .75));
-  font: 700 .7rem/1.25 var(--display); text-transform: uppercase;
+  font: 700 .8rem/1.2 var(--display); text-transform: uppercase;
 }
 
-.reels-page { padding: clamp(40px, 7vw, 96px) 0 0; }
+.reels-page, .section-page { padding: clamp(40px, 7vw, 96px) 0 0; }
+.section-page .kicker { margin-bottom: 6px; }
+.empty { color: var(--muted); font-size: 1.1rem; }
 .reels-page .page-title { margin-bottom: 8px; }
 .reels-page .kicker { margin-bottom: 28px; }
 .reel-grid { display: grid; gap: 4px; grid-template-columns: repeat(5, minmax(0, 1fr)); }
@@ -150,15 +185,17 @@ main:focus { outline: none; }
 html.is-locked { overflow: hidden; }
 .viewer {
   width: 100vw; height: 100dvh; max-width: none; max-height: none; margin: 0; padding: 0; border: 0;
-  background: #000; color: var(--text); overflow: hidden;
+  background: #fff; color: var(--text); overflow: hidden;
 }
-.viewer::backdrop { background: #000; }
+.viewer::backdrop { background: #fff; }
 .viewer-feed { height: 100%; overflow-y: auto; scroll-snap-type: y mandatory; overscroll-behavior: contain; scrollbar-width: none; }
 .viewer-feed::-webkit-scrollbar { display: none; }
 .viewer-slide { height: 100dvh; display: flex; align-items: center; justify-content: center; scroll-snap-align: start; scroll-snap-stop: always; }
 /* Ancho explícito y no aspect-ratio + max-width: así el ancho mínimo automático salía del alto y en
-   el celu el video 9:16 quedaba de 475px en una pantalla de 390, recortado a la derecha. */
-.viewer-frame { position: relative; height: 100%; width: min(100%, calc(100dvh * var(--r))); }
+   el celu el video 9:16 quedaba de 475px en una pantalla de 390, recortado a la derecha.
+   El alto sale del ancho, así el marco mide justo lo que el video: el fondo del visor es blanco y
+   el título y la barra de progreso tienen que quedar sobre el video, no en el blanco de alrededor. */
+.viewer-frame { position: relative; width: min(100%, calc(100dvh * var(--r))); aspect-ratio: var(--r); max-height: 100%; }
 .viewer-video, .viewer-frame iframe { display: block; width: 100%; height: 100%; object-fit: contain; border: 0; background: #000; }
 .viewer-paused {
   position: absolute; inset: 0; margin: auto; width: 76px; height: 76px; padding: 18px 16px 18px 22px;
@@ -169,7 +206,7 @@ html.is-locked { overflow: hidden; }
   position: absolute; left: 0; right: 0; bottom: 0; display: flex; justify-content: space-between; align-items: flex-end; gap: 16px;
   padding: 56px 18px 22px; background: linear-gradient(transparent, rgba(0, 0, 0, .7)); pointer-events: none;
 }
-.viewer-title { pointer-events: auto; max-width: 75%; text-decoration: none; font: 700 1rem/1.25 var(--display); text-transform: uppercase; }
+.viewer-title { pointer-events: auto; max-width: 75%; text-decoration: none; font: 700 1.15rem/1.2 var(--display); text-transform: uppercase; }
 .viewer-title:hover { color: var(--accent); }
 .viewer-count { color: var(--muted); font-size: .9rem; white-space: nowrap; }
 .viewer-progress { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: rgba(255, 255, 255, .18); }
@@ -189,25 +226,26 @@ html.is-locked { overflow: hidden; }
 @media (hover: none) { .viewer-prev, .viewer-next, .lightbox-prev, .lightbox-next { display: none; } }
 
 .more { margin: 96px 0 24px; padding-top: 24px; border-top: 1px solid var(--line); }
-.section-label { font-size: .8rem; color: var(--muted); font-weight: 600; margin: 32px 0 14px; }
+.section-label { font-size: .88rem; color: var(--muted); font-weight: 600; margin: 32px 0 14px; }
 .more .section-label { margin-top: 0; }
 
 /* Sobre mí y contacto */
-.page-title { margin: 0 0 24px; font-size: clamp(1.9rem, 4.4vw, 3.3rem); line-height: 1.05; font-weight: 700; }
-.page-title--big { font-size: clamp(2.1rem, 6.6vw, 5.4rem); max-width: 12ch; }
+.page-title { margin: 0 0 24px; font-size: clamp(2.2rem, 5vw, 3.8rem); line-height: 1.02; font-weight: 700; }
 .about { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: clamp(28px, 6vw, 96px); padding: clamp(48px, 8vw, 110px) 0; align-items: start; }
 .about-photo { width: 100%; max-width: 320px; aspect-ratio: 1; object-fit: cover; border-radius: 4px; filter: grayscale(.2); }
 .about-bio p { margin: 0 0 1em; font-size: clamp(1.1rem, 1.6vw, 1.35rem); line-height: 1.5; max-width: 52ch; }
-.tag-list { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 8px; }
-.tag-list li { border: 1px solid var(--line); border-radius: 999px; padding: 4px 14px; font-size: .95rem; }
-.cta { display: inline-block; margin-top: 40px; padding: 10px 22px; background: var(--text); color: var(--bg); text-decoration: none; font-weight: 700; font-size: .9rem; border-radius: 999px; }
-.cta:hover { background: var(--accent); color: var(--text); }
+/* Sin bordes: lista simple, separada solo por espacio. */
+.tag-list { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 6px 22px; }
+.tag-list li { font-size: 1rem; }
+/* El borde mantiene la forma del botón en el hover, cuando el fondo se vuelve blanco como la página. */
+.cta { display: inline-block; margin-top: 40px; padding: 10px 22px; border: 1px solid var(--text); background: var(--text); color: var(--bg); text-decoration: none; font-weight: 700; font-size: 1rem; border-radius: 999px; transition: background .2s, color .2s; }
+.cta:hover { background: #fff; color: var(--text); }
 
 .contact { padding: clamp(56px, 10vw, 140px) 0; }
-.contact-list { list-style: none; padding: 0; margin: 48px 0 0; border-top: 1px solid var(--line); }
+.contact-list { list-style: none; padding: 0; margin: 0; border-top: 1px solid var(--line); }
 .contact-list a {
   display: flex; justify-content: space-between; gap: 16px; padding: 22px 0;
-  border-bottom: 1px solid var(--line); text-decoration: none; font-size: clamp(1.1rem, 2.9vw, 1.9rem); font-weight: 700;
+  border-bottom: 1px solid var(--line); text-decoration: none; font-size: clamp(1.25rem, 3.3vw, 2.2rem); font-weight: 700;
 }
 .contact-list a span:last-child { color: var(--muted); text-transform: none; font-weight: 500; }
 .contact-list a:hover span:last-child { color: var(--accent); }
@@ -219,9 +257,6 @@ html.is-locked { overflow: hidden; }
   margin-top: 96px; padding: 28px var(--gutter); border-top: 1px solid var(--line); color: var(--muted); font-size: .9rem;
 }
 .site-footer p { margin: 0; }
-.footer-links { display: flex; gap: 18px; }
-.footer-links a { text-decoration: none; }
-.footer-links a:hover { color: var(--text); }
 
 /* Lightbox */
 .lightbox { width: 100vw; height: 100dvh; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; overflow: hidden; background: rgba(8, 8, 7, .96); color: var(--text); }
@@ -238,6 +273,23 @@ html.is-locked { overflow: hidden; }
 .lightbox-prev { left: 6px; top: 50%; translate: 0 -50%; }
 .lightbox-next { right: 6px; top: 50%; translate: 0 -50%; }
 
+/* Celu y tablet: la barra lateral no entra; queda una barra negra arriba y el menú se abre como panel. */
+@media (max-width: 899px) {
+  :root { --sidebar-w: 0px; }
+  .sidebar { position: sticky; top: 0; inset: auto; width: auto; overflow: visible; padding: 14px var(--gutter); text-align: center; }
+  .sidebar-bar { display: flex; align-items: center; justify-content: space-between; }
+  .brand { font-size: 1.6rem; }
+  /* Solo texto, en mayúsculas como los items del menú; el padding deja un área de toque cómoda. */
+  .menu-toggle {
+    display: inline-block; padding: 12px 0 12px 16px; border: 0;
+    background: none; color: var(--text); font-weight: 700; letter-spacing: .1em; text-transform: uppercase; cursor: pointer;
+  }
+  .sidebar-panel { display: none; }
+  .sidebar.is-open { position: fixed; inset: 0; overflow-y: auto; }
+  .sidebar.is-open .sidebar-panel { display: flex; min-height: calc(100dvh - 80px); }
+  .menu { margin-top: 36px; }
+  .page { margin-left: 0; }
+}
 @media (max-width: 1099px) {
   .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .reel-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
@@ -245,11 +297,6 @@ html.is-locked { overflow: hidden; }
 }
 @media (max-width: 639px) {
   :root { --row-h: 150px; --gap: 6px; }
-  /* Poppins en mayúsculas no entra en una sola fila en el celu: marca arriba, secciones abajo. */
-  .site-header { flex-wrap: wrap; row-gap: 8px; padding-block: 12px; }
-  .brand { font-size: 1.05rem; }
-  .brand, .nav a { white-space: nowrap; }
-  .nav { width: 100%; justify-content: space-between; font-size: .8rem; gap: 8px; }
   .grid { grid-template-columns: minmax(0, 1fr); gap: 32px; }
   .about { grid-template-columns: minmax(0, 1fr); }
   /* En el celu, 3 columnas como la grilla de reels de Instagram. */
@@ -257,12 +304,12 @@ html.is-locked { overflow: hidden; }
   .reel-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 3px; margin-inline: calc(var(--gutter) * -1); }
   .reel-grid .tile-caption { display: none; }
   .tile-play { width: 18px; height: 18px; top: 7px; right: 7px; }
-  .viewer-title { font-size: .9rem; }
+  .viewer-title { font-size: 1rem; }
   .about-photo { max-width: 200px; }
   .lightbox-slide { padding: 56px 0; }
   .lightbox-prev, .lightbox-next { top: auto; bottom: 12px; translate: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .card-media img, .gallery-item img, .video-tile img { transition: none; }
+  .card-media img, .gallery-item img, .video-tile img, .card-overlay { transition: none; }
 }

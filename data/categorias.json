@@ -1,0 +1,30 @@
+{
+ "note": "Árbol del menú lateral. Cada proyecto va a tomar su categoría de un tag de Behance con el nombre exacto de la categoría (sin importar mayúsculas, tildes ni espacios). Esa integración todavía no está hecha: por ahora las categorías solo arman el menú.",
+ "groups": [
+  {
+   "id": "fotografia",
+   "name": "Fotografía",
+   "kind": "foto",
+   "categories": [
+    "Foto Fija",
+    "Fotografía en Shows",
+    "Fotografía Deportiva",
+    "Fotografía en Eventos",
+    "Fotografía Callejera",
+    "Fotografía en Estudio",
+    "Portadas para Álbum"
+   ]
+  },
+  {
+   "id": "video",
+   "name": "Video",
+   "kind": "video",
+   "categories": [
+    "Contenido Redes Sociales",
+    "Cortometrajes",
+    "Coberturas Audiovisuales",
+    "Videoclips"
+   ]
+  }
+ ]
+}

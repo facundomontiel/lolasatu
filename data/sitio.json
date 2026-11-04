@@ -3,6 +3,12 @@
   "Soy Lola, me gusta el arte. Trabajo entre la cámara y la edición: dirijo, filmo y edito contenido para redes, cubro shows y eventos, y hago foto fija y backstage en rodajes.",
   "Me interesa lo que pasa alrededor: la previa de un show, el detrás de escena de un video, el ritmo de una maratón o una calle cualquiera en un viaje."
  ],
+ "producer": {
+  "intro": "Además tengo mi propia productora:",
+  "name": "Calambre",
+  "website": "https://calambre.cargo.site/",
+  "instagram": "calambreprod"
+ },
  "services": [
   "Dirección, cámara y edición",
   "Reels y contenido para redes",
@@ -10,5 +16,9 @@
   "Fotografía deportiva",
   "Foto fija y backstage"
  ],
- "email": "lolasatu@gmail.com"
+ "email": "lolasatu@gmail.com",
+ "socials": {
+  "youtube": "https://www.youtube.com/c/LolaSatu",
+  "tiktok": "https://www.tiktok.com/@lolasatu01"
+ }
 }

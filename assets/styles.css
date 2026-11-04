@@ -234,6 +234,9 @@ html.is-locked { overflow: hidden; }
 .about { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: clamp(28px, 6vw, 96px); padding: clamp(48px, 8vw, 110px) 0; align-items: start; }
 .about-photo { width: 100%; max-width: 320px; aspect-ratio: 1; object-fit: cover; border-radius: 4px; filter: grayscale(.2); }
 .about-bio p { margin: 0 0 1em; font-size: clamp(1.1rem, 1.6vw, 1.35rem); line-height: 1.5; max-width: 52ch; }
+.about-producer p { margin: 0; font-size: 1.05rem; }
+.about-producer a { text-underline-offset: 4px; }
+.producer-name { font-weight: 700; }
 /* Sin bordes: lista simple, separada solo por espacio. */
 .tag-list { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 6px 22px; }
 .tag-list li { font-size: 1rem; }

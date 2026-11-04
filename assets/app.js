@@ -255,16 +255,61 @@ function fillList(list, items) {
   list.append(...items.map((item) => createElement("li", "", item)));
 }
 
+// Bloque "Productora" de Sobre mí; sale de sitio.json y se oculta si no está cargado.
+function fillProducer(view, producer) {
+  const block = $('[data-field="producer"]', view);
+  if (!producer) {
+    block.hidden = true;
+    return;
+  }
+  setText(block, "producer-intro", producer.intro);
+  setText(block, "producer-name", producer.name);
+  // El nombre es el link a la web; sin web queda como texto (un <a> sin href no es link).
+  if (producer.website) $('[data-field="producer-name"]', block).href = producer.website;
+  // El Instagram se agrega acá y no fijo en el HTML: si falta, no queda un "·" suelto.
+  if (producer.instagram) {
+    const link = createElement("a", "", `@${producer.instagram}`);
+    Object.assign(link, { href: `https://instagram.com/${producer.instagram}`, target: "_blank", rel: "noopener" });
+    $(".producer-links", block).append(" · ", link);
+  }
+}
+
 function renderAbout() {
   const view = cloneTemplate("tpl-about");
   const { profile } = state.behance;
   $(".about-photo", view).src = profile.avatar;
   $(".about-bio", view).append(...state.site.about.map((text) => createElement("p", "", text)));
+  fillProducer(view, state.site.producer);
   fillList($('[data-field="services"]', view), state.site.services);
   const tools = profile.tools.filter((tool) => tool !== "Adobe Portfolio");
   fillList($('[data-field="tools"]', view), tools.map((tool) => tool.replace(/^Adobe /, "")));
   document.title = "Sobre mí — Lola Satu";
   return view;
+}
+
+// YouTube y TikTok no vienen del perfil de Behance: se cargan a mano en sitio.json ("socials").
+// Si falta alguna, su link no aparece (ni en el menú ni en Contacto).
+const EXTRA_SOCIALS = ["youtube", "tiktok"];
+
+// "https://www.tiktok.com/@lolasatu01" → "@lolasatu01"; "https://www.youtube.com/c/LolaSatu" → "/LolaSatu"
+function socialHandle(url) {
+  const last = new URL(url).pathname.split("/").filter(Boolean).pop() || "";
+  return last.startsWith("@") ? last : `/${last}`;
+}
+
+function fillExtraSocials(root, withHandles) {
+  const socials = state.site.socials || {};
+  for (const key of EXTRA_SOCIALS) {
+    const url = socials[key];
+    $$(`a[data-field="${key}"]`, root).forEach((link) => {
+      if (!url) {
+        (link.closest("li") || link).remove();
+        return;
+      }
+      link.href = url;
+      if (withHandles) setText(link, `${key}-handle`, socialHandle(url));
+    });
+  }
 }
 
 function renderContact() {
@@ -275,6 +320,7 @@ function renderContact() {
   setText(view, "instagram-handle", `@${profile.instagram.split("/").filter(Boolean).pop()}`);
   setLink(view, "behance", profile.behance);
   setText(view, "behance-handle", `/${profile.username}`);
+  fillExtraSocials(view, true);
   const emailLink = $('a[data-field="email"]', view);
   if (email) emailLink.href = `mailto:${email}`;
   else emailLink.setAttribute("aria-disabled", "true");
@@ -403,6 +449,7 @@ function fillChrome() {
   setText($(".site-footer"), "year", new Date().getFullYear());
   setLink($(".sidebar"), "instagram", profile.instagram);
   setLink($(".sidebar"), "behance", profile.behance);
+  fillExtraSocials($(".sidebar"), false);
 }
 
 async function boot() {

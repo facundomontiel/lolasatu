@@ -4,7 +4,7 @@
   "username": "lolasatu",
   "occupation": "Diseñadora audiovisual",
   "location": "Buenos Aires, Argentina",
-  "avatar": "https://pps.services.adobe.com/api/profile/9F704B1A5E2269400A495FE2@AdobeID/image/05b5ed9d-5e2c-48d7-b947-b963bb8122e6/276",
+  "avatar": "https://pps.services.adobe.com/api/profile/9F704B1A5E2269400A495FE2@AdobeID/image/b23558ff-00c5-4bbf-aed6-e7f572775eca/276",
   "banner": "https://mir-s3-cdn-cf.behance.net/2f393870b2e2adbd6da31f927c48dd28/6ba0eec5-dd75-474f-a170-736e023e0a80_rwc_0x921x3008x526x3008.JPG?h=1e7b7a7183e9479998e3b73e462148c4",
   "instagram": "https://instagram.com/lolasatu01",
   "behance": "https://www.behance.net/lolasatu",
@@ -23,12 +23,9 @@
    "description": "Videos cinematográficos para instagram",
    "year": 2026,
    "tags": [
-    "ABROBACIA",
-    "deporte",
-    "redes sociales",
     "Filmmaker",
-    "video",
-    "edición"
+    "edición",
+    "Contenido redes sociales"
    ],
    "kinds": [
     "video"
@@ -42,7 +39,7 @@
    "blocks": [
     {
      "type": "text",
-     "html": "<strong>Filmmaker para El Club de la Mortal <br></strong><a href=\"https://www.instagram.com/elclubdelamortal/?hl=es-la\" target=\"_blank\" rel=\"noopener\">LINK AL INSTAGRAM</a>"
+     "html": "<a href=\"https://www.instagram.com/elclubdelamortal/?hl=es-la\" target=\"_blank\" rel=\"noopener\">LINK AL INSTAGRAM</a>"
     },
     {
      "type": "video",
@@ -89,9 +86,7 @@
     "neopistea",
     "MiloJ",
     "sevenkayne",
-    "Sonya7iii",
-    "Fotografia",
-    "lightroom"
+    "Sonya7iii"
    ],
    "kinds": [
     "foto"
@@ -522,14 +517,14 @@
    "description": "",
    "year": 2025,
    "tags": [
-    "باندا",
     "rock",
     "indie",
     "ryan",
     "Fotografia",
     "Sonya7iii",
     "Photography ",
-    "photographer"
+    "photographer",
+    "banda"
    ],
    "kinds": [
     "foto"
@@ -684,7 +679,10 @@
     "Videoclip",
     "backstage",
     "fotofija",
-    "reel"
+    "reel",
+    "Foto FIja",
+    "fotografía en estudio",
+    "Contenido redes sociales"
    ],
    "kinds": [
     "foto",
@@ -956,7 +954,8 @@
    "tags": [
     "Fotografia",
     "Brasil",
-    "callejera"
+    "callejera",
+    "fotografia callejera"
    ],
    "kinds": [
     "foto"
@@ -1117,7 +1116,7 @@
     "Fotografia",
     "video",
     "backstage",
-    "fotofija"
+    "Foto FIja"
    ],
    "kinds": [
     "foto"
@@ -1294,8 +1293,7 @@
     "casorio",
     "Fotografia",
     "Sonya7iii",
-    "fotografa",
-    "фото"
+    "fotografa"
    ],
    "kinds": [
     "foto"
@@ -1918,7 +1916,8 @@
     "Show",
     "Fotografia",
     "Vivo",
-    "musica"
+    "musica",
+    "Fotografía en Shows"
    ],
    "kinds": [
     "foto"
@@ -2043,7 +2042,8 @@
     "sinfin",
     "trap",
     "prize",
-    "Flash"
+    "Flash",
+    "fotografía en estudio"
    ],
    "kinds": [
     "foto"
@@ -2185,7 +2185,8 @@
    "tags": [
     "argentina",
     "Fotografia",
-    "festejos"
+    "festejos",
+    "fotografia callejera"
    ],
    "kinds": [
     "foto"

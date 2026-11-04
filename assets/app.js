@@ -80,9 +80,14 @@ function renderHome() {
 
 /* ---------- Fotografía / Video y sus categorías ---------- */
 
-// Pendiente: integración con Behance. Cada proyecto va a entrar a una categoría por un tag con
-// su nombre exacto (ver data/categorias.json); hasta entonces las categorías salen vacías.
-const projectsInCategory = () => [];
+// Un proyecto entra en una categoría si en Behance tiene un tag con su nombre, sin importar
+// mayúsculas, tildes ni espacios: "Foto FIja", "fotofija" y "Foto Fija" valen lo mismo.
+const tagKey = (text) => text.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/\s+/g, "");
+
+function projectsInCategory(category) {
+  const key = tagKey(category);
+  return state.behance.projects.filter((project) => project.tags.some((tag) => tagKey(tag) === key));
+}
 
 function renderSection(group, categorySlug) {
   const category = group.categories.find((name) => slugify(name) === categorySlug);

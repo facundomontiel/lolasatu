@@ -1,5 +1,5 @@
 {
- "note": "Árbol del menú lateral. Cada proyecto va a tomar su categoría de un tag de Behance con el nombre exacto de la categoría (sin importar mayúsculas, tildes ni espacios). Esa integración todavía no está hecha: por ahora las categorías solo arman el menú.",
+ "note": "Árbol del menú lateral. Cada proyecto entra en una categoría si en Behance tiene un tag con el nombre exacto de la categoría (sin importar mayúsculas, tildes ni espacios). Un proyecto puede estar en varias. Sumar o renombrar una categoría acá la agrega al menú.",
  "groups": [
   {
    "id": "fotografia",

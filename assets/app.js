@@ -64,8 +64,7 @@ function cardElement(project) {
   $(".card-link", view).href = `#/trabajo/${project.slug}`;
   setImage($("img", view), project.cover, COVER_SIZES);
   $(".card-title", view).textContent = project.title;
-  $(".card-meta", view).textContent = `${kindsLabel(project.kinds)} · ${project.year}`;
-  $(".card-year", view).textContent = project.year;
+  $(".card-meta", view).textContent = kindsLabel(project.kinds);
   $(".card-overlay-title", view).textContent = project.title;
   return view;
 }
@@ -429,12 +428,27 @@ function viewFor(section) {
   return VIEWS[section] || renderHome;
 }
 
+// Sin hover (celu/tablet), el título se muestra en la tarjeta que cruza una franja en el centro
+// de la pantalla mientras se scrollea: hace de "hover" sin pedir un toque extra.
+const TOUCH_SCREEN = window.matchMedia("(hover: none)");
+let centeredCards = null;
+
+function observeCenteredCards(root) {
+  centeredCards?.disconnect();
+  if (!TOUCH_SCREEN.matches) return;
+  centeredCards = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => entry.target.classList.toggle("is-centered", entry.isIntersecting));
+  }, { rootMargin: "-45% 0px -45% 0px" });
+  $$(".card", root).forEach((card) => centeredCards.observe(card));
+}
+
 function route() {
   const previous = state.currentRoute;
   if (previous !== null) state.scroll[previous] = window.scrollY;
   const path = currentPath();
   const [section = "", slug = ""] = path.split("/");
   $("#main").replaceChildren(viewFor(section)(decodeURIComponent(slug)));
+  observeCenteredCards($("#main"));
   state.currentRoute = path;
   markActiveRoute(path);
   // Volver con "atrás" deja la lista donde estaba; entrar a una página nueva arranca arriba.

@@ -41,9 +41,10 @@ button { font: inherit; color: inherit; }
 .skip { position: absolute; left: -9999px; }
 .skip:focus { left: var(--gutter); top: 8px; z-index: 20; background: var(--text); color: var(--bg); padding: 6px 12px; }
 
-/* Contenido en blanco con letra negra; el menú y los visores son oscuros y redefinen los tokens
-   para sí mismos, así todo lo que usa var(--text)/var(--bg) adentro se adapta solo. */
-.sidebar, .lightbox, .viewer {
+/* Contenido en blanco con letra negra. El menú lateral y los controles del visor de reels (que van
+   sobre el video) son oscuros y redefinen los tokens para sí mismos, así todo lo que usa
+   var(--text)/var(--bg) adentro se adapta solo. */
+.sidebar, .viewer {
   --bg: #0e0d0c;
   --surface: #181715;
   --text: #f1ede6;
@@ -104,22 +105,21 @@ main:focus { outline: none; }
 .card-link:hover .card-title { color: var(--accent); }
 .card-meta { margin: 0; color: var(--muted); font-size: .9rem; }
 
-/* Con mouse, el título aparece al pasar por encima, en un recuadro blanco sobre la foto.
-   En pantallas táctiles no hay hover: ahí el título sigue visible debajo de la foto. */
+/* El título aparece en un recuadro blanco sobre la foto: con mouse, al pasar por encima; en
+   pantallas táctiles (sin hover), en la tarjeta que cruza el centro de la pantalla al scrollear
+   (app.js le pone .is-centered). El h2 de abajo queda para lectores de pantalla y buscadores. */
 .card-overlay {
   position: absolute; inset: 18px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
   padding: 16px; text-align: center; background: rgba(255, 255, 255, .86); color: var(--text);
   opacity: 0; transition: opacity .35s;
 }
-.card-year { color: var(--muted); font-size: .95rem; letter-spacing: .04em; }
 .card-overlay-title { font: 300 clamp(1.15rem, 1.8vw, 1.8rem)/1.12 var(--display); text-transform: uppercase; letter-spacing: .02em; }
+.grid { row-gap: 20px; }
+.card-title, .card-meta { position: absolute; width: 1px; height: 1px; margin: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 @media (hover: hover) {
-  .grid { row-gap: 20px; }
   .card-link:hover .card-overlay, .card-link:focus-visible .card-overlay { opacity: 1; }
-  /* El h2 queda para lectores de pantalla y buscadores, pero no se ve. */
-  .card-title, .card-meta { position: absolute; width: 1px; height: 1px; margin: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 }
-@media (hover: none) { .card-overlay { display: none; } }
+@media (hover: none) { .card.is-centered .card-overlay { opacity: 1; } }
 
 /* Proyecto */
 .project { padding-top: 32px; }
@@ -262,7 +262,7 @@ html.is-locked { overflow: hidden; }
 .site-footer p { margin: 0; }
 
 /* Lightbox */
-.lightbox { width: 100vw; height: 100dvh; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; overflow: hidden; background: rgba(8, 8, 7, .96); color: var(--text); }
+.lightbox { width: 100vw; height: 100dvh; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; overflow: hidden; background: #fff; color: var(--text); }
 .lightbox::backdrop { background: transparent; }
 /* Una foto por "pantalla": se pasa deslizando de costado y la foto sigue al dedo. */
 .lightbox-track { display: flex; height: 100%; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; overscroll-behavior: contain; scrollbar-width: none; }
@@ -300,7 +300,7 @@ html.is-locked { overflow: hidden; }
 }
 @media (max-width: 639px) {
   :root { --row-h: 150px; --gap: 6px; }
-  .grid { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+  .grid { grid-template-columns: minmax(0, 1fr); gap: 14px; }
   .about { grid-template-columns: minmax(0, 1fr); }
   /* En el celu, 3 columnas como la grilla de reels de Instagram. */
   .reels { grid-template-columns: repeat(min(var(--cols, 3), 3), minmax(0, 1fr)); gap: 3px; }

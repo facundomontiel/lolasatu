@@ -428,22 +428,34 @@ function viewFor(section) {
   return VIEWS[section] || renderHome;
 }
 
-// Sin hover (celu/tablet), el toque hace de hover: el primero en un proyecto muestra su título y
-// el segundo entra; tocar otro proyecto mueve el título y tocar fuera lo saca. No se muestra nada
-// solo al scrollear (con la versión automática siempre había una foto tapada).
+// Sin hover (celu/tablet), el dedo hace de mouse: mientras está apoyado, quieto o deslizando, el
+// proyecto que tiene debajo muestra su título; al levantarlo se va. Un toque corto entra como
+// siempre. Probado antes: título automático en la tarjeta del centro (siempre tapaba una foto) y
+// dos toques para entrar (incómodo).
 const TOUCH_SCREEN = window.matchMedia("(hover: none)");
+const TOUCH_HIDE_DELAY_MS = 350;
 
-function setupTouchReveal() {
-  document.addEventListener("click", (event) => {
+function setupTouchHover() {
+  let current = null;
+  let hideTimer = 0;
+  const highlight = (card) => {
+    if (card === current) return;
+    current?.classList.remove("is-touched");
+    current = card;
+    current?.classList.add("is-touched");
+  };
+  // passive: no frena el scroll nativo; elementFromPoint sigue a la tarjeta que pasa bajo el dedo.
+  const follow = (event) => {
     if (!TOUCH_SCREEN.matches) return;
-    const card = event.target.closest(".card");
-    const revealed = $(".card.is-revealed");
-    if (revealed && revealed !== card) revealed.classList.remove("is-revealed");
-    if (card && card !== revealed) {
-      event.preventDefault();
-      card.classList.add("is-revealed");
-    }
-  });
+    clearTimeout(hideTimer);
+    const { clientX, clientY } = event.touches[0];
+    highlight(document.elementFromPoint(clientX, clientY)?.closest(".card") || null);
+  };
+  const release = () => { hideTimer = setTimeout(() => highlight(null), TOUCH_HIDE_DELAY_MS); };
+  document.addEventListener("touchstart", follow, { passive: true });
+  document.addEventListener("touchmove", follow, { passive: true });
+  document.addEventListener("touchend", release, { passive: true });
+  document.addEventListener("touchcancel", release, { passive: true });
 }
 
 function route() {
@@ -480,7 +492,7 @@ async function boot() {
   }
   fillChrome();
   setupMenuToggle();
-  setupTouchReveal();
+  setupTouchHover();
   setupLightbox();
   setupReelViewer();
   // popstate llega antes que hashchange: marca que este cambio de ruta es un "atrás/adelante".

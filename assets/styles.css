@@ -106,8 +106,8 @@ main:focus { outline: none; }
 .card-meta { margin: 0; color: var(--muted); font-size: .9rem; }
 
 /* El título aparece en un recuadro blanco sobre la foto: con mouse, al pasar por encima; en
-   pantallas táctiles (sin hover), con el primer toque (app.js le pone .is-revealed y el segundo
-   toque entra). El h2 de abajo queda para lectores de pantalla y buscadores. */
+   pantallas táctiles (sin hover), mientras el dedo está apoyado sobre la foto, quieto o deslizando
+   (app.js le pone .is-touched). El h2 de abajo queda para lectores de pantalla y buscadores. */
 .card-overlay {
   position: absolute; inset: 18px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
   padding: 16px; text-align: center; background: rgba(255, 255, 255, .86); color: var(--text);
@@ -119,7 +119,7 @@ main:focus { outline: none; }
 @media (hover: hover) {
   .card-link:hover .card-overlay, .card-link:focus-visible .card-overlay { opacity: 1; }
 }
-@media (hover: none) { .card.is-revealed .card-overlay { opacity: 1; } }
+@media (hover: none) { .card.is-touched .card-overlay { opacity: 1; } }
 
 /* Proyecto */
 .project { padding-top: 32px; }

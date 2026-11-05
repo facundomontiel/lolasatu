@@ -428,18 +428,22 @@ function viewFor(section) {
   return VIEWS[section] || renderHome;
 }
 
-// Sin hover (celu/tablet), el título se muestra en la tarjeta que cruza una franja en el centro
-// de la pantalla mientras se scrollea: hace de "hover" sin pedir un toque extra.
+// Sin hover (celu/tablet), el toque hace de hover: el primero en un proyecto muestra su título y
+// el segundo entra; tocar otro proyecto mueve el título y tocar fuera lo saca. No se muestra nada
+// solo al scrollear (con la versión automática siempre había una foto tapada).
 const TOUCH_SCREEN = window.matchMedia("(hover: none)");
-let centeredCards = null;
 
-function observeCenteredCards(root) {
-  centeredCards?.disconnect();
-  if (!TOUCH_SCREEN.matches) return;
-  centeredCards = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => entry.target.classList.toggle("is-centered", entry.isIntersecting));
-  }, { rootMargin: "-45% 0px -45% 0px" });
-  $$(".card", root).forEach((card) => centeredCards.observe(card));
+function setupTouchReveal() {
+  document.addEventListener("click", (event) => {
+    if (!TOUCH_SCREEN.matches) return;
+    const card = event.target.closest(".card");
+    const revealed = $(".card.is-revealed");
+    if (revealed && revealed !== card) revealed.classList.remove("is-revealed");
+    if (card && card !== revealed) {
+      event.preventDefault();
+      card.classList.add("is-revealed");
+    }
+  });
 }
 
 function route() {
@@ -448,7 +452,6 @@ function route() {
   const path = currentPath();
   const [section = "", slug = ""] = path.split("/");
   $("#main").replaceChildren(viewFor(section)(decodeURIComponent(slug)));
-  observeCenteredCards($("#main"));
   state.currentRoute = path;
   markActiveRoute(path);
   // Volver con "atrás" deja la lista donde estaba; entrar a una página nueva arranca arriba.
@@ -477,6 +480,7 @@ async function boot() {
   }
   fillChrome();
   setupMenuToggle();
+  setupTouchReveal();
   setupLightbox();
   setupReelViewer();
   // popstate llega antes que hashchange: marca que este cambio de ruta es un "atrás/adelante".

@@ -261,7 +261,8 @@ function fillProducer(view, producer) {
     block.hidden = true;
     return;
   }
-  setText(block, "producer-intro", producer.intro);
+  // La frase es opcional: sin ella quedan solo los links ("Calambre · @calambreprod").
+  setText(block, "producer-intro", producer.intro ? `${producer.intro} ` : "");
   setText(block, "producer-name", producer.name);
   // El nombre es el link a la web; sin web queda como texto (un <a> sin href no es link).
   if (producer.website) $('[data-field="producer-name"]', block).href = producer.website;
@@ -287,26 +288,16 @@ function renderAbout() {
 }
 
 // YouTube y TikTok no vienen del perfil de Behance: se cargan a mano en sitio.json ("socials").
-// Si falta alguna, su link no aparece (ni en el menú ni en Contacto).
+// Van solo en los logos del menú (Contacto queda con Instagram, Behance y el mail); si falta una,
+// su logo no aparece.
 const EXTRA_SOCIALS = ["youtube", "tiktok"];
 
-// "https://www.tiktok.com/@lolasatu01" → "@lolasatu01"; "https://www.youtube.com/c/LolaSatu" → "/LolaSatu"
-function socialHandle(url) {
-  const last = new URL(url).pathname.split("/").filter(Boolean).pop() || "";
-  return last.startsWith("@") ? last : `/${last}`;
-}
-
-function fillExtraSocials(root, withHandles) {
+function fillExtraSocials(root) {
   const socials = state.site.socials || {};
   for (const key of EXTRA_SOCIALS) {
-    const url = socials[key];
     $$(`a[data-field="${key}"]`, root).forEach((link) => {
-      if (!url) {
-        (link.closest("li") || link).remove();
-        return;
-      }
-      link.href = url;
-      if (withHandles) setText(link, `${key}-handle`, socialHandle(url));
+      if (socials[key]) link.href = socials[key];
+      else link.remove();
     });
   }
 }
@@ -319,7 +310,6 @@ function renderContact() {
   setText(view, "instagram-handle", `@${profile.instagram.split("/").filter(Boolean).pop()}`);
   setLink(view, "behance", profile.behance);
   setText(view, "behance-handle", `/${profile.username}`);
-  fillExtraSocials(view, true);
   const emailLink = $('a[data-field="email"]', view);
   if (email) emailLink.href = `mailto:${email}`;
   else emailLink.setAttribute("aria-disabled", "true");
@@ -478,7 +468,7 @@ function fillChrome() {
   setText($(".site-footer"), "year", new Date().getFullYear());
   setLink($(".sidebar"), "instagram", profile.instagram);
   setLink($(".sidebar"), "behance", profile.behance);
-  fillExtraSocials($(".sidebar"), false);
+  fillExtraSocials($(".sidebar"));
 }
 
 async function boot() {
